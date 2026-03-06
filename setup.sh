@@ -19,7 +19,7 @@ echo ""
 read -rp "OPENAI_BASEURL  (OpenAI-compatible base URL): " OPENAI_BASEURL
 read -rp "OPENAI_API_KEY  (OpenAI API key):             " OPENAI_API_KEY
 read -rp "ANTHROPIC_BASEURL  (Anthropic-compatible base URL): " ANTHROPIC_BASEURL
-read -rp "ANTHROPIC_API_KEY  (Anthropic API key):           " ANTHROPIC_API_KEY
+read -rp "ANTHROPIC_AUTH_TOKEN  (Anthropic API key):           " ANTHROPIC_AUTH_TOKEN
 
   echo ""
 
@@ -29,7 +29,7 @@ read -rp "ANTHROPIC_API_KEY  (Anthropic API key):           " ANTHROPIC_API_KEY
 touch "$ZSHRC"
 ENV_UPDATED=0
 
-for VAR_NAME in OPENAI_BASEURL OPENAI_API_KEY ANTHROPIC_BASEURL ANTHROPIC_API_KEY; do
+for VAR_NAME in OPENAI_BASEURL OPENAI_API_KEY ANTHROPIC_BASEURL ANTHROPIC_AUTH_TOKEN; do
   VAR_VALUE="${!VAR_NAME}"
   if [[ -n "$VAR_VALUE" ]]; then
     sed -i '' "/^export ${VAR_NAME}=/d" "$ZSHRC" 2>/dev/null || true
