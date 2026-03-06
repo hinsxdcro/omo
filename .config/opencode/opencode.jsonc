@@ -9,8 +9,8 @@
     },
     "anthropic": {
       "options": {
-        "baseURL": "{env:CLAUDE_BASEURL}",
-        "apiKey": "{env:CLAUDE_API_KEY}"
+        "baseURL": "{env:ANTHROPIC_BASEURL}",
+        "apiKey": "{env:ANTHROPIC_API_KEY}"
       },
       "models": {
         "global.anthropic.claude-sonnet-4-6": {

@@ -20,8 +20,8 @@ Installs OpenCode, Oh My OpenCode, and OCMonitor. Copies all configs from this r
 |---|---|
 | `OPENAI_BASEURL` | OpenAI-compatible API base URL |
 | `OPENAI_API_KEY` | OpenAI API key |
-| `CLAUDE_BASEURL` | Anthropic-compatible API base URL |
-| `CLAUDE_API_KEY` | Anthropic API key |
+| `ANTHROPIC_BASEURL` | Anthropic-compatible API base URL |
+| `ANTHROPIC_API_KEY` | Anthropic API key |
 
 > Ask the IT team if you don't have these.
 
@@ -60,8 +60,8 @@ The config reads API credentials from environment variables. Add them to your `~
 ```bash
 export OPENAI_BASEURL="<your-openai-base-url>"
 export OPENAI_API_KEY="<your-openai-api-key>"
-export CLAUDE_BASEURL="<your-claude-base-url>"
-export CLAUDE_API_KEY="<your-claude-api-key>"
+export ANTHROPIC_BASEURL="<your-claude-base-url>"
+export ANTHROPIC_API_KEY="<your-claude-api-key>"
 ```
 
 Then reload: `source ~/.zshrc`
