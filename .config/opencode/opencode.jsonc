@@ -1,5 +1,5 @@
 {
-  "plugin": ["oh-my-opencode@latest"],
+  "plugin": ["oh-my-openagent@latest"],
   "provider": {
     "openai": {
       "options": {
@@ -71,8 +71,8 @@
             "output": ["text"]
           }
         },
-        "global.anthropic.claude-opus-4-6-v1": {
-          "name": "Claude Opus 4.6 (Bedrock)",
+        "global.anthropic.claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (Bedrock)",
           "family": "claude-opus",
           "release_date": "2026-02-05",
           "last_updated": "2026-02-05",

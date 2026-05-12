@@ -63,14 +63,14 @@ fi
 
 echo ""
 
-# ─── 4. Install Oh My OpenCode ──────────────────────────────────────────────
+# ─── 4. Install Oh My OpenAgent ──────────────────────────────────────────────
 # NOTE: The installer will ask you interactive questions.
 #       Choose whatever you want — the config from this repo overrides everything.
 
-echo "Installing Oh My OpenCode..."
+echo "Installing Oh My OpenAgent..."
 echo "  → Choose any options during the setup — our config will override them."
 echo ""
-bunx oh-my-opencode@latest install --no-tui --claude=no --gemini=no --copilot=no
+bunx oh-my-openagent@latest install --no-tui --claude=no --gemini=no --copilot=no
 
 echo ""
 
@@ -82,7 +82,7 @@ mkdir -p ~/.config/opencode
 mkdir -p ~/.config/ocmonitor
 
 cp "$SCRIPT_DIR/.config/opencode/opencode.jsonc" ~/.config/opencode/opencode.jsonc
-cp "$SCRIPT_DIR/.config/opencode/oh-my-opencode.json" ~/.config/opencode/oh-my-opencode.json
+cp "$SCRIPT_DIR/.config/opencode/oh-my-openagent.json" ~/.config/opencode/oh-my-openagent.json
 cp "$SCRIPT_DIR/.config/ocmonitor/models.json" ~/.config/ocmonitor/models.json
 
 echo "✓ Configs copied"
