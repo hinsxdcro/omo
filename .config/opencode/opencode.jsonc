@@ -13,7 +13,7 @@
       },
       "models": {
         "openai.gpt-5.6-sol": {
-          "name": "GPT 5.6 Sol",
+          "name": "GPT 5.6 Sol (Bedrock)",
           "family": "gpt-5.6",
           "attachment": true,
           "reasoning": true,
@@ -26,7 +26,7 @@
             }
           ],
           "limit": {
-            "context": 400000,
+            "context": 1050000,
             "output": 128000
           },
           "modalities": {
@@ -35,7 +35,7 @@
           }
         },
         "openai.gpt-5.6-terra": {
-          "name": "GPT 5.6 Terra",
+          "name": "GPT 5.6 Terra (Bedrock)",
           "family": "gpt-5.6",
           "attachment": true,
           "reasoning": true,
@@ -48,7 +48,7 @@
             }
           ],
           "limit": {
-            "context": 400000,
+            "context": 1050000,
             "output": 128000
           },
           "modalities": {
@@ -57,7 +57,7 @@
           }
         },
         "openai.gpt-5.6-luna": {
-          "name": "GPT 5.6 Luna",
+          "name": "GPT 5.6 Luna (Bedrock)",
           "family": "gpt-5.6",
           "attachment": true,
           "reasoning": true,
@@ -70,7 +70,7 @@
             }
           ],
           "limit": {
-            "context": 400000,
+            "context": 1050000,
             "output": 128000
           },
           "modalities": {
