@@ -1,29 +1,46 @@
-# OpenCode + Oh My OpenCode Setup Guide
+# OpenCode + Oh My OpenAgent Setup Guide
 
-Team setup for OpenCode with Oh My OpenCode plugin and OCMonitor.
+Team setup for OpenCode with Oh My OpenAgent plugin.
 
 ## TL;DR
+
+Get your API keys from the internal AI proxy portal (ask the IT team for the link), then:
 
 ```bash
 ./setup.sh
 ```
 
-Installs OpenCode, Oh My OpenCode, and OCMonitor. Copies all configs from this repo. Prompts you for API base URLs and keys, then exports them to `~/.zshrc`.
+Installs OpenCode and Oh My OpenAgent. Copies all configs from this repo. Prompts you for API base URLs and keys, then exports them to `~/.zshrc`:
 
-## Prerequisites
+```bash
+export OPENAI_BASE_URL="<company-proxy-base-url>"
+export OPENAI_API_KEY="<your-api-key>"
+export ANTHROPIC_BASE_URL="<company-proxy-base-url>"
+export ANTHROPIC_AUTH_TOKEN="<your-api-key>"
+```
 
-- Node.js 18+
-- macOS or Linux
-- Have the following ready before you start:
+> Both pairs point at the same proxy — they are kept separate for compatibility
+> with other tools (codex, claude-code, etc.).
 
-| Variable | Description |
-|---|---|
-| `OPENAI_BASEURL` | OpenAI-compatible API base URL |
-| `OPENAI_API_KEY` | OpenAI API key |
-| `ANTHROPIC_BASEURL` | Anthropic-compatible API base URL |
-| `ANTHROPIC_AUTH_TOKEN` | Anthropic API key |
+The script covers all the steps below — only follow them if you prefer to set things up manually.
 
-> Ask the IT team if you don't have these.
+## Providers
+
+The config defines two **custom providers** instead of the built-in `openai`/`anthropic` ones
+(built-ins are disabled via `disabled_providers` so they can't auto-activate from env keys):
+
+| Provider | Wire protocol | Models |
+|---|---|---|
+| `bedrock-openai` | OpenAI Responses API (`/v1/responses`) | `openai.gpt-5.6-sol`, `openai.gpt-5.6-terra`, `openai.gpt-5.6-luna` |
+| `bedrock-anthropic` | Anthropic Messages API (`/v1/messages`) | `us.anthropic.claude-fable-5`, `us.anthropic.claude-sonnet-5`, `us.anthropic.claude-opus-4-8`, `us.anthropic.claude-haiku-4-5-20251001-v1:0` |
+
+They cannot be merged into one provider: the proxy serves GPT models **only** on
+`/v1/responses` and Claude models **only** on `/v1/messages`.
+
+Model references always use the `provider/model` form, e.g.
+`bedrock-anthropic/us.anthropic.claude-fable-5` or `bedrock-openai/openai.gpt-5.6-sol`.
+
+Supported reasoning efforts (both providers): `low`, `medium`, `high`, `xhigh`, `max`.
 
 ## 1. Install OpenCode
 
@@ -35,12 +52,12 @@ opencode --version
 npm install -g opencode
 ```
 
-## 2. Install Oh My OpenCode
+## 2. Install Oh My OpenAgent
 
 Run the installer — **choose any options it asks, it doesn't matter.** The config files from this repo will override everything.
 
 ```bash
-npx oh-my-opencode@latest init
+bunx oh-my-openagent@latest install --no-tui --claude=no --gemini=no --copilot=no
 ```
 
 Then copy configs from this repo:
@@ -49,8 +66,8 @@ Then copy configs from this repo:
 # OpenCode config
 cp .config/opencode/opencode.jsonc ~/.config/opencode/opencode.jsonc
 
-# Oh My OpenCode config
-cp .config/opencode/oh-my-opencode.json ~/.config/opencode/oh-my-opencode.json
+# Oh My OpenAgent config
+cp .config/opencode/oh-my-openagent.json ~/.config/opencode/oh-my-openagent.json
 ```
 
 ## 3. Configure Environment Variables
@@ -58,35 +75,22 @@ cp .config/opencode/oh-my-opencode.json ~/.config/opencode/oh-my-opencode.json
 The config reads API credentials from environment variables. Add them to your `~/.zshrc`:
 
 ```bash
-export OPENAI_BASEURL="<your-openai-base-url>"
-export OPENAI_API_KEY="<your-openai-api-key>"
-export ANTHROPIC_BASEURL="<your-claude-base-url>"
-export ANTHROPIC_AUTH_TOKEN="<your-claude-api-key>"
+export OPENAI_BASE_URL="<company-proxy-base-url>"
+export OPENAI_API_KEY="<your-api-key>"
+export ANTHROPIC_BASE_URL="<company-proxy-base-url>"
+export ANTHROPIC_AUTH_TOKEN="<your-api-key>"
 ```
 
 Then reload: `source ~/.zshrc`
 
-## 4. Install OpenCode Monitor
-
-Install `uv` first (fast Python package manager), then install OCMonitor:
-
-```bash
-# Install uv
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Install OCMonitor
-uv tool install git+https://github.com/Shlomob/ocmonitor-share.git
-
-# Copy model pricing config
-mkdir -p ~/.config/ocmonitor
-cp .config/ocmonitor/models.json ~/.config/ocmonitor/models.json
-```
-
-## 5. Verify
+## 4. Verify
 
 ```bash
 opencode --version
-ocmonitor config show
+
+# Smoke-test each provider:
+opencode run --model 'bedrock-anthropic/us.anthropic.claude-fable-5' 'what model are you?'
+opencode run --model 'bedrock-openai/openai.gpt-5.6-sol' 'what model are you?'
 ```
 
 ## Quick Reference
@@ -94,10 +98,5 @@ ocmonitor config show
 | Config File | Location |
 |---|---|
 | OpenCode | `~/.config/opencode/opencode.jsonc` |
-| Oh My OpenCode | `~/.config/opencode/oh-my-opencode.json` |
-| OCMonitor models | `~/.config/ocmonitor/models.json` |
+| Oh My OpenAgent | `~/.config/opencode/oh-my-openagent.json` |
 | Environment variables | `~/.zshrc` |
-
-## Caveats
-
-- **OCMonitor input token counts unavailable for our custom Anthropic models.** The proxy does not return input token usage for these models, so OCMonitor cost tracking will be incomplete. Contact the IT team for further help.

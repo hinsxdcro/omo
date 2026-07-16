@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ZSHRC="$HOME/.zshrc"
 
-echo "=== OpenCode + Oh My OpenCode Setup ==="
+echo "=== OpenCode + Oh My OpenAgent Setup ==="
 echo ""
 
 # ─── 1. Collect API credentials ─────────────────────────────────────────────
@@ -12,13 +12,13 @@ echo ""
 # Press Enter to skip any value — existing entries in ~/.zshrc will be kept.
 
 echo "Before we start, we need your API credentials."
-echo "Ask the IT team if you don't have these."
+echo "Get your API keys from the internal AI proxy portal (ask the IT team for the link)."
 echo "Press Enter to skip — existing values in ~/.zshrc won't be overwritten."
 echo ""
 
-read -rp "OPENAI_BASEURL  (OpenAI-compatible base URL): " OPENAI_BASEURL
+read -rp "OPENAI_BASE_URL  (OpenAI-compatible base URL): " OPENAI_BASE_URL
 read -rp "OPENAI_API_KEY  (OpenAI API key):             " OPENAI_API_KEY
-read -rp "ANTHROPIC_BASEURL  (Anthropic-compatible base URL): " ANTHROPIC_BASEURL
+read -rp "ANTHROPIC_BASE_URL  (Anthropic-compatible base URL): " ANTHROPIC_BASE_URL
 read -rp "ANTHROPIC_AUTH_TOKEN  (Anthropic API key):           " ANTHROPIC_AUTH_TOKEN
 
   echo ""
@@ -29,7 +29,7 @@ read -rp "ANTHROPIC_AUTH_TOKEN  (Anthropic API key):           " ANTHROPIC_AUTH_
 touch "$ZSHRC"
 ENV_UPDATED=0
 
-for VAR_NAME in OPENAI_BASEURL OPENAI_API_KEY ANTHROPIC_BASEURL ANTHROPIC_AUTH_TOKEN; do
+for VAR_NAME in OPENAI_BASE_URL OPENAI_API_KEY ANTHROPIC_BASE_URL ANTHROPIC_AUTH_TOKEN; do
   VAR_VALUE="${!VAR_NAME}"
   if [[ -n "$VAR_VALUE" ]]; then
     sed -i '' "/^export ${VAR_NAME}=/d" "$ZSHRC" 2>/dev/null || true
@@ -79,34 +79,11 @@ echo ""
 echo "Copying configs..."
 
 mkdir -p ~/.config/opencode
-mkdir -p ~/.config/ocmonitor
 
 cp "$SCRIPT_DIR/.config/opencode/opencode.jsonc" ~/.config/opencode/opencode.jsonc
 cp "$SCRIPT_DIR/.config/opencode/oh-my-openagent.json" ~/.config/opencode/oh-my-openagent.json
-cp "$SCRIPT_DIR/.config/ocmonitor/models.json" ~/.config/ocmonitor/models.json
 
 echo "✓ Configs copied"
-echo ""
-
-# ─── 6. Install uv + OCMonitor ──────────────────────────────────────────────
-
-if command -v uv &>/dev/null; then
-  echo "✓ uv already installed"
-else
-  echo "Installing uv..."
-  curl -LsSf https://astral.sh/uv/install.sh | sh
-  export PATH="$HOME/.local/bin:$PATH"
-  echo "✓ uv installed"
-fi
-
-if command -v ocmonitor &>/dev/null; then
-  echo "✓ OCMonitor already installed"
-else
-  echo "Installing OCMonitor..."
-  uv tool install git+https://github.com/Shlomob/ocmonitor-share.git
-  echo "✓ OCMonitor installed"
-fi
-
 echo ""
 
 # ─── Done ────────────────────────────────────────────────────────────────────
@@ -115,4 +92,3 @@ echo "=== Setup Complete ==="
 echo ""
 echo "Run 'source ~/.zshrc' or open a new terminal, then verify with:"
 echo "   opencode --version"
-echo "   ocmonitor config show"
